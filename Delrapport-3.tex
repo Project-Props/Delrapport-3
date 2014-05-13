@@ -76,7 +76,7 @@ A web-based database-system of The Royal Danish Theatre props department. The sy
 \subsubsection{Nonfunctional Requirements}
 \begin{itemize}
   \item The system should be web-based and usable on standard PC's and tablets, and supported by every OS.
-  \item The webapplication should be user friendly and easy to navigate. The most commonly used functionalities, namely the run- and set-up-lists should be preferable be found on the frontpage.
+  \item The webapplication should be user friendly and easy to navigate. The most commonly used functionalities, namely the so-called run- and set-up-lists should be preferable be found on the frontpage.
   \item It should be possible for Martin (head of the IT-department) to maintain and support, and possibly expand the system after product-delivery. Therefore the system will be developed using MySQL and PHP, which is familiar to Martin.
   \item The system should be able to communicate with the existing media-database Cumulus.
   \item The system should be secure in a way that prevents people from the outside to corrupt the data.
@@ -90,7 +90,14 @@ A web-based database-system of The Royal Danish Theatre props department. The sy
   \item It should be possible to print run- and set-up-lists.
 \end{itemize}
 \subsection{b) UML use case diagram}
-\includegraphics[scale=0.6]{use.png}
+\includegraphics[scale=0.6]{use.png}\\
+We have four actors in our use case diagram:
+\begin{itemize}
+\item An employee, who has permission to add a prop, search for props/productions/suppliers, and view this items, indicated with the lines from \textit{Employee} to the different use cases. The arrows between the use cases indicate an interaction between them - the employee can "activate" such an use case during another use case or going directly to the use case.
+\item A Chairman, who is an extension of an employee, with the special permissions to edit and add productions.
+\item A MySQL database, which holds the props/productions/suppliers data the \textit{Employee} and \textit{Chairman} actors accesses in the different use cases.
+\item A Cumulus media database, which holds the image data the \textit{Employee} and \textit{Chairman} actors accesses in these use cases. 
+\end{itemize}
 \subsection{c) Use cases}
 The following three use cases are the ones of most importance:
 %1. Tilføj Rek

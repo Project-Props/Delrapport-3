@@ -393,6 +393,20 @@ We chose a simple and effective strategy for using version control. The master b
 \newline
 \newline
 See appendix A for our current commit log of the master branch. There is a total of 45 commits on topic branches not yet merged into master. They are not included in the log, since they might change.
+\newline
+\newline
+Here is a short overview of the most important changes that has happended within the history of the application:
+\begin{description}
+  \item[Commit "d4b310e"] \hfill \\
+    At this point the save method on our model class was feature complete. This method is really important since its an essential part of adding new records to the database. Since commit "d4b310e" we have started refactoring the method to make it more maintainable.
+  \item[Commit "e4e1379"] \hfill \\
+    From a testing perspecitive this commit is quite important. After this point the database will be automatically reset before every test. This ensures that tests that modify the database wont break other tests since the tests are ran in random order.
+  \item[Commit "c72ba12"] \hfill \\
+    This commit added a SQL file that can be used to build the database with the required schema.
+  \item[Commit "e327b6a"] \hfill \\
+    Up until this commit we had been working on some relatively low level infrastructure. This is the code that sits closest to the web browser and receives a representation of the request from the browser and finds out which code to run and which view to render. This is an essential part of our application flow as its part of every request.
+\end{description}
+See appendix B for important pieces of the application code.
 \section{Project collaboration}
 So far our collaboration with the client has been through planning meetings during the initial requirements elicitation phase. Here is a timeline of the meetings and participants:
 \begin{description}
@@ -409,7 +423,6 @@ So far our collaboration with the client has been through planning meetings duri
 \end{description}
 During each meeting we had allocated one person to taking notes and then later adding those notes to version control. This has been useful when preparing for other meetings and when writing the reports but other than that they have been used a lot.\\\\
 We have not yet written any code documentation since we have not written any code.
-% TODO: add appendix with commit log of master
 \section{Appendices}
 \subsection{Appendix A: Commit log}
 \begin{verbatim}
@@ -1427,5 +1440,256 @@ Date:   Thu Mar 13 20:02:15 2014 +0100
 
     initial commit with gitignore
 
+\end{verbatim}
+\subsection{Appendix B: Important pieces of application code}
+\textbf{Router class}
+\newline
+This is the class the sits closest to the browser in the flow through our application. It has two important methods: "define\_route" and "process\_request". The router is a class that maps a request to a URL and a callback. It checks if it has a URL matching the one of the request and if so it runs the specified callback.
+\newline
+"define\_route" is the method used to define a new route that consists of a URL and a callback. "process\_request" is the method that accepts the request and figures out which callback to run.
+\begin{verbatim}
+<?php
+
+/**
+ * A route that maps requested URLs to code.
+ *
+ * This is a singleton. Use `Router::instance()` to get to the instance.
+ *
+ * Here is an example of how to use it:
+ *
+ * <pre>
+ * // get the instance
+ * $router = Router::instance();
+ *
+ * // define a new route
+ * // when the URL "/" is hit, the router will run the callback
+ * $router->define_route("/", function() {
+ *   // instantiate controller, render view, whatever...
+ * });
+ *
+ * // tell the router to process the incoming request
+ * $router->process_request(Request::instance());
+ * </pre>
+ */
+class Router {
+  /**
+   * array the defined routes.
+   */
+  private $routes;
+
+  /**
+   * object the cached instance.
+   */
+  private static $instance;
+
+  /**
+   * Get the instance of this class.
+   *
+   * This will be the same instance everytime.
+   *
+   * @return object the instance.
+   */
+  public static function instance() {
+    if (!static::$instance) {
+      static::$instance = new Router();
+    }
+
+    return static::$instance;
+  }
+
+  /**
+   * Create a new instance with no routes defined.
+   */
+  private function __construct() {
+    $this->routes = [];
+  }
+
+  /**
+   * Define a new route.
+   *
+   * If another route with the same URL is defined then it will be overriden.
+   *
+   * @param string $path the URL of the route.
+   * @param function $fun the function to be executed when the URL gets hit.
+   */
+  public function define_route($path, $lambda_or_method_path) {
+    $fun;
+
+    if (is_string($lambda_or_method_path)) {
+      $controller = explode("#", $lambda_or_method_path)[0] . "Controller";
+      $method = explode("#", $lambda_or_method_path)[1];
+
+      $fun = function() use ($controller, $method) {
+        $c = new $controller;
+        $c->{$method}();
+      };
+    } else {
+      $fun = $lambda_or_method_path;
+    }
+
+    $this->routes[$path] = new Route($path, $fun);
+  }
+
+  /**
+   * Process an incoming request.
+   *
+   * @param Request $request the incoming request.
+   */
+  public function process_request($request) {
+    $this->process_matching_route($request);
+  }
+
+  private function process_matching_route($request) {
+    foreach ($this->routes as $route){
+      if ($route->matches($request)) {
+        $route->run();
+        return;
+      }
+    }
+
+    throw new NoRouteMatches("No route matches '" . $request->url() . "'");
+  }
+
+  /**
+   * Redirect to a given URL.
+   *
+   * @param string $path the URL to redirect to.
+   * @param object $redirecter the redirecter to use. This parameter is optional and defaults to a new Redirecter instance.
+   */
+  public function redirect_to($path, $redirecter = null) {
+    if (!$redirecter) {
+      $redirecter = new Redirecter();
+    }
+
+    $redirecter->redirect_to($path);
+  }
+}
+
+/**
+ * Exception class that will be thrown when a route doesn't match.
+ */
+class NoRouteMatches extends Exception {}
+
+/**
+ * A class that redirects to another URL.
+ */
+class Redirecter {
+  /**
+   * Redirect to a url.
+   *
+   * @param string $path the url to redirect to.
+   */
+  public function redirect_to($path) {
+    header("Location: " . $path);
+    exit();
+  }
+}
+\end{verbatim}
+\textbf{Router class}
+This is the SQL script that is responsible for creating the database and schema.
+\begin{verbatim}
+/*
+ * Creating the Props 2.0 database and tables. 
+ */
+
+DROP DATABASE IF EXISTS Props_2;
+
+CREATE DATABASE IF NOT EXISTS Props_2;
+-- Undersøg om det giver mening med : DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE Props_2;
+
+CREATE TABLE IF NOT EXISTS Sections(
+    id INT NOT NULL AUTO_INCREMENT
+  , name VARCHAR(128) NOT NULL
+  , PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS Prop_statuses(
+    id INT NOT NULL AUTO_INCREMENT
+  , name VARCHAR(128) NOT NULL
+  , color VARCHAR(128) NOT NULL
+  , PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS Production_statuses(
+    id INT NOT NULL AUTO_INCREMENT
+  , name VARCHAR(128) NOT NULL
+  , color VARCHAR(128) NOT NULL
+  , PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS Periods(
+    id INT NOT NULL AUTO_INCREMENT
+  , name VARCHAR(128) NOT NULL
+  , PRIMARY KEY (id)
+);
+
+
+CREATE TABLE IF NOT EXISTS Suppliers (
+    id INT NOT NULL AUTO_INCREMENT
+  , name VARCHAR(128) NOT NULL
+  , email VARCHAR(128) 
+  , web_page VARCHAR(128)
+  , phone VARCHAR(128)
+  , street VARCHAR(128)
+  , city VARCHAR(128)
+  , zip_code VARCHAR(128)
+  , country VARCHAR(128)
+  , comment TEXT
+  , PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS Productions (
+    id VARCHAR(9) NOT NULL -- production number, on the form xxxx-yyyy
+  , title VARCHAR(128) NOT NULL
+  , status_id INT NOT NULL
+  , premiere_date DATE
+  , venue VARCHAR(128) -- spillested
+  , instructor VARCHAR(128)
+  , scenographer VARCHAR(128)
+  , choreographer VARCHAR(128)
+  , stage_manager VARCHAR(128)
+  , storage VARCHAR(128) -- opbevaringssted
+  , comment TEXT
+  , date_added DATETIME NOT NULL 
+  , PRIMARY KEY (id)
+  , FOREIGN KEY (status_id) REFERENCES Production_statuses(id)
+);
+
+CREATE TABLE IF NOT EXISTS Props(
+    id INT NOT NULL AUTO_INCREMENT
+  , prop_nr INT NOT NULL
+  , old_prop_nr INT
+  , section_id INT NOT NULL
+  , description VARCHAR(128)
+  , comment TEXT
+  , date_added DATETIME NOT NULL
+  , date_updated DATETIME NOT NULL
+  , supplier_id INT
+  , price REAL
+  , bought_for_id VARCHAR(9)
+  , status_id INT NOT NULL
+  , size VARCHAR(128)
+  , category VARCHAR(128)
+  , subcategory VARCHAR(128)
+  , period_id INT
+  , deleted BOOLEAN NOT NULL DEFAULT 0
+  , creditor VARCHAR(128)
+  , maintenance_time REAL
+  , PRIMARY KEY (id)
+  , FOREIGN KEY (section_id) REFERENCES Sections(id)
+  , FOREIGN KEY (supplier_id) REFERENCES Suppliers(id)
+  , FOREIGN KEY (bought_for_id) REFERENCES Productions(id)
+  , FOREIGN KEY (status_id) REFERENCES Prop_statuses(id)
+  , FOREIGN KEY (period_id) REFERENCES Periods(id)
+);
+
+CREATE TABLE IF NOT EXISTS Used_in (
+    prop_id INT NOT NULL
+  , production_id VARCHAR(9) NOT NULL
+  , PRIMARY KEY (prop_id, production_id)
+  , FOREIGN KEY (prop_id) REFERENCES Props(id)
+  , FOREIGN KEY (production_id) REFERENCES Productions(id)
+);
 \end{verbatim}
 \end{document}

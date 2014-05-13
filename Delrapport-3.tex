@@ -348,16 +348,16 @@ Since we haven't made the object model yet, obviously we can't determine which o
 \includegraphics[scale=0.6]{sequenceDiagram_addProduction.png}\\\\
 \includegraphics[scale=0.6]{sequenceDiagram_search.png}\\
 \section{System-design summary}
-As we have not started coding yet a summary of the system-design so far, will be very abstract. So far we have used a lot of resources on the initial planning, both internal in the group, and in cooperation with the client, to ensure that our initial design-plan meets the expectations the client have for the new system. This has been a some what difficult task, as the new system will cause the client to change how they administratively handle the props. \\ 
-Right now our main tasks will be to create the mySQL database, which involve transferring all of the data in the current system to our new system and adapt it to the fit the new database-design. We will, when possible, in this process, begin the PHP-coding and in that way develop back- and front-end simultaneously.
+Since we are developing a web application the software stack is mostly given. We will be developing the frontend using HTML, CSS, and JavaScript. This is the technologies that you have to use when deploying to the web.
+\newline
+For the backend you have a bit more freedom for choosing software stack. We have chosen to use PHP and MySQL as this will allow the theatre's IT department to continue maintaining the application after our final delivery.
 \section{Program- and systemtest}
-The amount of testing we have done at this moment is very limited because we don't have any code yet to test. We have however discussed how we will structure the testing when we start coding.
+We've chosen to use Test Driven Development when developing the system. This means that tests will be written before the implementation code is written. This weaves the test plan and implementation plan together. There will not be a dedicated time period in which we do the testing and there will not be a defined set of resources (developers) in charge of doing the testing. This is because the testing will be done by the developers while they're writing the implementation code.
+\newline
+Our test suite will consist of both low level unit tests and high level feature tests. The unit tests will be focused on testing one unit of the system. A unit will mostly be a single class and the methods within it, and will focus on testing the side effects or return values of the methods. Unit tests will sometimes (not exclusively) be isolated from other units they interact with (boundaries). This will be done through mocks and stubs.
 \newline
 \newline
-We intend to use Test Driven Development when developing the system. This means that tests will be written before the implementation code is written. This weaves the test plan and implementation plan together. There will not be a dedicated time period in which we do the testing and there will not be a defined set of resources (developers) in charge of doing the testing. People will test their code as they write it and modify the tests accordingly when changing the code.
-\newline
-\newline
-We don't have any test case specifications, a test incident report, or a test report summary, since we don't yet have any tests.
+To ensure that all the units are interacting correctly and that the features of the application are actually working we will make use of high level feature tests. These tests will focus on driving the application from a user's point of view (the browser). They will do things like click links, fill out forms, and make assertions about what should appear on the screen. This will allow us to test something as high level as "A user creates a new prop and sees it on the front page".
 \section{User interface and interaction design}
 \subsection{a) Screenshots of user interfaces}
 % (a) Præsenter skærmbilleder af de mest interessante dele af jeres brugergrænseflade.

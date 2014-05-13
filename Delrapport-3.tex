@@ -1456,8 +1456,7 @@ Date:   Thu Mar 13 20:02:15 2014 +0100
 
 \end{verbatim}
 \subsection{Appendix B: Important pieces of application code}
-\textbf{Router class}
-\newline
+\subsubsection{Router class}
 This is the class the sits closest to the browser in the flow through our application. It has two important methods: "define\_route" and "process\_request". The router is a class that maps a request to a URL and a callback. It checks if it has a URL matching the one of the request and if so it runs the specified callback.
 \newline
 "define\_route" is the method used to define a new route that consists of a URL and a callback. "process\_request" is the method that accepts the request and figures out which callback to run.
@@ -1599,7 +1598,7 @@ class Redirecter {
   }
 }
 \end{verbatim}
-\textbf{Router class}
+\subsubsection{Router class}
 This is the SQL script that is responsible for creating the database and schema.
 \begin{verbatim}
 /*

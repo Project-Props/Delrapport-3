@@ -346,7 +346,7 @@ Since we haven't made the object model yet, obviously we can't determine which o
 \includegraphics[scale=0.6]{sequenceDiagram_addProduction.png}\\\\
 \includegraphics[scale=0.6]{sequenceDiagram_search.png}\\
 \section{System-design summary}
-Since we are developing a web application the software stack is mostly given. We will be developing the frontend using HTML, CSS, and JavaScript. This is the technologies that you have to use when deploying to the web.
+Since we are developing a web application the software stack is mostly given. We will be developing the frontend using HTML, CSS, and JavaScript. This is the technologies that you have to use when deploying to the web \footnote{https://developer.mozilla.org/en-US/docs/Web}.
 \newline
 For the backend you have a bit more freedom for choosing software stack. We have chosen to use PHP and MySQL as this will allow the theatre's IT department to continue maintaining the application after our final delivery.
 \section{Program- and systemtest}
@@ -359,43 +359,42 @@ To ensure that all the units are interacting correctly and that the features of 
 \section{User interface and interaction design}
 \subsection{a) Screenshots of user interfaces}
 % (a) Præsenter skærmbilleder af de mest interessante dele af jeres brugergrænseflade.
-The following are screenshots of our most recent prototype.
-\newline
-\newline
-\centerline{\includegraphics[scale=0.25]{prototype_frontpage.png}}
-\newline
+\centerline{\includegraphics[scale=0.25]{ui-frontpage.png}}
 \textbf{Front page}\\
 All pages will show a big search field up top as this is the primary feature of the site.\\
 The frontpage also shows a list of productions that are being done this season as well as the latest props added to the database.
 \newline
 \newline
-\centerline{\includegraphics[scale=0.25]{prototype_advanced_search.png}}
-\newline
-\textbf{Front page with advanced search}\\
-It is often useful to limit the scope of a search to a specfic production or a specific section of props. This can be done through some dropdown menus that appear when clicking on advanced search.
-\newline
-\newline
-\centerline{\includegraphics[scale=0.25]{prototype_search_result.png}}
+\centerline{\includegraphics[scale=0.25]{ui-search-result.png}}
 \newline
 \textbf{Search result page}\\
 This page shows the result of doing a search. It shows the performances and props that were matched. Along with the attributes also shown on the frontpage it also shows the status of the prop and production. A status could be something like "reversed" or "free to use".
 \newline
 \newline
-\centerline{\includegraphics[scale=0.25]{prototype_show_prop.png}}
+\centerline{\includegraphics[scale=0.25]{ui-prop-show.png}}
 \newline
 \textbf{Single prop page}\\
 This is the page the shows information about a single prop in the database. It simply shows the attributes of the prop.
 \subsection{b) Flow and user interactions}
-Up until now we have been focusing on building backend functionality. This mean that at this point we don't yet have a user interface to give a demonstration of.
+\centerline{\includegraphics[scale=0.15]{flow.png}}
+The image shows the flow of a user performing a search. The user types in a search query and clicks the "search" button. The user is then sent to a screen that shows the relevant results.
 \subsection{c) Demo of prototype}
-There is no actual behavior to give a demonstration of yet (see previous point).
+Our audio/visual presentation of the user interface can be found here: http://youtube.com/??????
+\newline
+The video gives a demonstration of the following features:
+\begin{itemize}
+  \item Getting an overview of current productions and new props
+  \item Adding new props
+  \item Editing props
+  \item Searching for props and productions
+\end{itemize}
 \subsection{d) Review of latest think aloud test}
 Since we handed in our last report we have not had any meetings with the client and have also not conducted any user tests. We also have no userinterface to test, yet.
 \section{Version control}
 We chose to use Git as our version control system. This gives us great confidence that we wont loose work and easy collaboration when using GitHub to host the repository.
 \newline
 \newline
-We chose a simple and effective strategy for using version control. The master branch represents the project as it is right now. This means whats on the master branch should always be working and master is therefor not used when developing new features, fixing bugs, refactoring, etc. To do that we use topic branches and when they are in a finished state they get merged back into master and then deleted. This techniques works well because Git has such cheap branching and merging. This technique is also very easy to maintain because the number of concurrent branches are kept at a minimum.
+We chose a simple and effective strategy for using version control. The master branch represents the project as it is right now. This means whats on the master branch should always be working and master is therefor not used when developing new features, fixing bugs, refactoring, etc. To do that we use topic branches and when they are in a finished state they get merged back into master and then deleted. This techniques works well because Git has such cheap branching and merging. This technique is also very easy to maintain because the number of concurrent branches are kept at a minimum \footnote{http://zachholman.com/posts/how-github-works/}.
 \newline
 \newline
 See appendix A for our current commit log of the master branch. There is a total of 45 commits on topic branches not yet merged into master. They are not included in the log, since they might change.
@@ -433,37 +432,37 @@ We have not yet written any code documentation since we have not written any cod
 \subsection{Appendix A: Commit log}
 \begin{verbatim}
 commit 713e115b77ffb1b3d25d8880797059a1477809cc
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 17:12:54 2014 +0200
 
     add example setup
 
 commit 39da04d6296b209999f24549a6e6a7c65bd556c0
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 16:41:32 2014 +0200
 
     extract instance vars method
 
 commit 962e5f11e8ac29738bc3a29689e917ddd0d81033
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 16:32:06 2014 +0200
 
     extract update_sql and insert_sql methods
 
 commit c8cb55ac699de3d8dd4eed46fc2c6e971a9cf6ce
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 16:28:53 2014 +0200
 
     extract new_record method
 
 commit d4b310ea3b9fe13c34e0a6e0e82444fbad0a82e1
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 16:05:59 2014 +0200
 
     test that models that get saved gets timestamp
 
 commit b714c289d2e6d08fdc1540570221f892c67a94c9
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 16:00:11 2014 +0200
 
     update things that depend on the the new database schema
@@ -488,7 +487,7 @@ Date:   Thu May 8 15:06:55 2014 +0200
     Users table deleted and added category- and subcategory attributes in props table
 
 commit 28af238d7dc3ed0a517233ad93ca6cddca97a431
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 14:58:24 2014 +0200
 
     extract default title into variable so its not duplicated
@@ -513,7 +512,7 @@ Date:   Thu May 8 14:31:02 2014 +0200
     title variable created
 
 commit 41492db1e5ca9527ad14d0a6ef4620ed6086200a
-Author: David Pedersen <dap@html24.net>
+Author: David Pedersen <david.pdrsn@gmail.com>
 Date:   Thu May 8 14:30:55 2014 +0200
 
     add todo
